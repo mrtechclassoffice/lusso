@@ -11,7 +11,7 @@ const wordVariants = {
     visible: (i: number) => ({
         opacity: 1,
         y: 0,
-        transition: { delay: i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+        transition: { delay: i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
     }),
 };
 
@@ -82,7 +82,7 @@ export default function HeroSection() {
                     <motion.div
                         initial={{ opacity: 0, scale: 1.05 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] as const }}
                         className="relative order-1 lg:order-2 h-[50vw] lg:h-full min-h-[320px]"
                     >
                         <Image

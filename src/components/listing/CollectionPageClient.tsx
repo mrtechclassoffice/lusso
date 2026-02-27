@@ -29,6 +29,7 @@ interface CollectionPageClientProps {
     products: Product[];
     badge?: string;
     quote?: string;
+    showFilters?: boolean;
 }
 
 export default function CollectionPageClient({
@@ -38,6 +39,7 @@ export default function CollectionPageClient({
     products,
     badge,
     quote,
+    showFilters = true,
 }: CollectionPageClientProps) {
     const [filterOpen, setFilterOpen] = useState(false);
     const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -94,99 +96,103 @@ export default function CollectionPageClient({
 
             {/* Toolbar */}
             <div className="flex items-center justify-between border-t border-b border-[#e8e4de] py-3 mb-8">
-                <div className="flex items-center gap-4">
-                    <button
-                        onClick={() => setFilterOpen(!filterOpen)}
-                        className="flex items-center gap-2 text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] hover:text-[#c8b89a] transition-colors"
-                    >
-                        <SlidersHorizontal size={14} strokeWidth={1.5} />
-                        Filters
-                        {(selectedSizes.length + selectedColors.length) > 0 && (
-                            <span className="bg-[#0a0a0a] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
-                                {selectedSizes.length + selectedColors.length}
-                            </span>
-                        )}
-                    </button>
-                    {(selectedSizes.length + selectedColors.length) > 0 && (
+                {showFilters ? (
+                    <div className="flex items-center gap-4">
                         <button
-                            onClick={() => { setSelectedSizes([]); setSelectedColors([]); }}
-                            className="flex items-center gap-1 text-[9px] tracking-widest uppercase text-[#6b6b6b] hover:text-[#0a0a0a] transition-colors"
+                            onClick={() => setFilterOpen(!filterOpen)}
+                            className="flex items-center gap-2 text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] hover:text-[#c8b89a] transition-colors"
                         >
-                            <X size={10} /> Clear
+                            <SlidersHorizontal size={14} strokeWidth={1.5} />
+                            Filters
+                            {(selectedSizes.length + selectedColors.length) > 0 && (
+                                <span className="bg-[#0a0a0a] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                                    {selectedSizes.length + selectedColors.length}
+                                </span>
+                            )}
                         </button>
-                    )}
-                </div>
+                        {(selectedSizes.length + selectedColors.length) > 0 && (
+                            <button
+                                onClick={() => { setSelectedSizes([]); setSelectedColors([]); }}
+                                className="flex items-center gap-1 text-[9px] tracking-widest uppercase text-[#6b6b6b] hover:text-[#0a0a0a] transition-colors"
+                            >
+                                <X size={10} /> Clear
+                            </button>
+                        )}
+                    </div>
+                ) : <div />}
                 <p className="text-[10px] tracking-wider text-[#6b6b6b] font-sans">{filtered.length} Products</p>
             </div>
 
             <div className="flex gap-10">
                 {/* Filter sidebar */}
-                <AnimatePresence>
-                    {filterOpen && (
-                        <motion.aside
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: 220 }}
-                            exit={{ opacity: 0, width: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="hidden md:block flex-shrink-0 overflow-hidden"
-                        >
-                            <div className="w-[220px] space-y-8">
-                                {/* Size */}
-                                <div>
-                                    <h3 className="text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] mb-4">Size</h3>
-                                    <div className="space-y-2">
-                                        {SIZES.map((size) => (
-                                            <label key={size} className="flex items-center gap-3 cursor-pointer group">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedSizes.includes(size)}
-                                                    onChange={() => toggleSize(size)}
-                                                    className="w-3 h-3 border border-[#c8b89a] accent-[#0a0a0a]"
-                                                />
-                                                <span className="text-xs font-sans text-[#6b6b6b] group-hover:text-[#0a0a0a] transition-colors">{size}</span>
-                                            </label>
-                                        ))}
+                {showFilters && (
+                    <AnimatePresence>
+                        {filterOpen && (
+                            <motion.aside
+                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1, width: 220 }}
+                                exit={{ opacity: 0, width: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="hidden md:block flex-shrink-0 overflow-hidden"
+                            >
+                                <div className="w-[220px] space-y-8">
+                                    {/* Size */}
+                                    <div>
+                                        <h3 className="text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] mb-4">Size</h3>
+                                        <div className="space-y-2">
+                                            {SIZES.map((size) => (
+                                                <label key={size} className="flex items-center gap-3 cursor-pointer group">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedSizes.includes(size)}
+                                                        onChange={() => toggleSize(size)}
+                                                        className="w-3 h-3 border border-[#c8b89a] accent-[#0a0a0a]"
+                                                    />
+                                                    <span className="text-xs font-sans text-[#6b6b6b] group-hover:text-[#0a0a0a] transition-colors">{size}</span>
+                                                </label>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Color */}
-                                <div>
-                                    <h3 className="text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] mb-4">Colour</h3>
-                                    <div className="space-y-2">
-                                        {COLORS.map((color) => (
-                                            <label key={color.name} className="flex items-center gap-3 cursor-pointer group">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedColors.includes(color.name)}
-                                                    onChange={() => toggleColor(color.name)}
-                                                    className="w-3 h-3 border border-[#c8b89a] accent-[#0a0a0a]"
-                                                />
-                                                <span
-                                                    className="w-3 h-3 rounded-full border border-[#e8e4de] flex-shrink-0"
-                                                    style={{ backgroundColor: color.hex }}
-                                                />
-                                                <span className="text-xs font-sans text-[#6b6b6b] group-hover:text-[#0a0a0a] transition-colors">{color.name}</span>
-                                            </label>
-                                        ))}
+                                    {/* Color */}
+                                    <div>
+                                        <h3 className="text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] mb-4">Colour</h3>
+                                        <div className="space-y-2">
+                                            {COLORS.map((color) => (
+                                                <label key={color.name} className="flex items-center gap-3 cursor-pointer group">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedColors.includes(color.name)}
+                                                        onChange={() => toggleColor(color.name)}
+                                                        className="w-3 h-3 border border-[#c8b89a] accent-[#0a0a0a]"
+                                                    />
+                                                    <span
+                                                        className="w-3 h-3 rounded-full border border-[#e8e4de] flex-shrink-0"
+                                                        style={{ backgroundColor: color.hex }}
+                                                    />
+                                                    <span className="text-xs font-sans text-[#6b6b6b] group-hover:text-[#0a0a0a] transition-colors">{color.name}</span>
+                                                </label>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
 
-                                {/* Collection */}
-                                <div>
-                                    <h3 className="text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] mb-4">Collection</h3>
-                                    <div className="space-y-2">
-                                        {COLLECTIONS.map((col) => (
-                                            <label key={col} className="flex items-center gap-3 cursor-pointer group">
-                                                <input type="checkbox" className="w-3 h-3 border border-[#c8b89a] accent-[#0a0a0a]" />
-                                                <span className="text-xs font-sans text-[#6b6b6b] group-hover:text-[#0a0a0a] transition-colors">{col}</span>
-                                            </label>
-                                        ))}
+                                    {/* Collection */}
+                                    <div>
+                                        <h3 className="text-[10px] tracking-widest uppercase font-sans text-[#0a0a0a] mb-4">Collection</h3>
+                                        <div className="space-y-2">
+                                            {COLLECTIONS.map((col) => (
+                                                <label key={col} className="flex items-center gap-3 cursor-pointer group">
+                                                    <input type="checkbox" className="w-3 h-3 border border-[#c8b89a] accent-[#0a0a0a]" />
+                                                    <span className="text-xs font-sans text-[#6b6b6b] group-hover:text-[#0a0a0a] transition-colors">{col}</span>
+                                                </label>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </motion.aside>
-                    )}
-                </AnimatePresence>
+                            </motion.aside>
+                        )}
+                    </AnimatePresence>
+                )}
 
                 {/* Product grid */}
                 <div className="flex-1 min-w-0">

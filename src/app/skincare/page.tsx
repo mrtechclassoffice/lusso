@@ -18,6 +18,7 @@ export default function SkincarePage() {
                 category="skincare"
                 products={products}
                 badge="Skincare"
+                showFilters={false}
             />
             <SkincareStandard />
         </>

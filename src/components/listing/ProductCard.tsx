@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 import { Heart } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { cn } from '@/lib/utils';
@@ -24,7 +26,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
-            transition={{ delay: index * 0.07, duration: 0.55, ease: [0.22, 1, 0.36, 1] as const }}
+            transition={{ delay: index * 0.07, duration: 0.55, ease: EASE }}
             className="group"
         >
             <Link href={`/products/${product.slug}`} className="block">

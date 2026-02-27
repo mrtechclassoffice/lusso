@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 
 const HERO_IMAGE = 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=1200&q=85';
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const wordVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i: number) => ({
         opacity: 1,
         y: 0,
-        transition: { delay: i * 0.12, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+        transition: { delay: i * 0.12, duration: 0.6, ease: EASE },
     }),
 };
 
@@ -82,7 +83,7 @@ export default function HeroSection() {
                     <motion.div
                         initial={{ opacity: 0, scale: 1.05 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] as const }}
+                        transition={{ duration: 0.9, ease: EASE }}
                         className="relative order-1 lg:order-2 h-[50vw] lg:h-full min-h-[320px]"
                     >
                         <Image
